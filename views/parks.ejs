@@ -1,0 +1,20 @@
+<% layout("layouts/boilerplate.ejs") %>
+<div class="container mt-5 container-parks" style="max-width: 1000px;font-family: 'Barriecito', cursive;">
+    <h1>The US National Parks</h1>
+    <h5 class="parks-text">Welcome to an adventure through the natural wonders of the United States—where towering mountains meet
+         vast deserts, serene lakes reflect ancient forests, and breathtaking landscapes await your exploration.
+        <br>
+        Let me take you from the lush meadows of the Great Smoky Mountains to the rugged cliffs of Acadia,
+         from the geothermal wonders of Yellowstone to the iconic grandeur of the Grand Canyon. 
+    </h5>
+</div>
+<div class="container-main my-5">    
+    <% for(let park of parks) {%> 
+        <div class="container-image">
+            <a href="/parks/<%=park._id%>" alt="<%=park.title%>">
+            <img src="<%= park.image%>" alt="<%= park.title%>" loading="lazy">
+            <h5 class="container-text"><%= park.title %></h5>
+            </a>            
+        </div>     
+    <% } %>
+</div>

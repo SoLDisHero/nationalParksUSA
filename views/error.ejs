@@ -1,0 +1,10 @@
+<% layout("layouts/boilerplate.ejs") %>
+
+<div class="alert alert-danger my-5 d-flex flex-column" role="alert" style="background-color: white;">
+    <h4 class="alert-heading">
+        <%= err.message %>
+    </h4>
+    <hr>
+    <img src="/pictures/error.jpg" alt="error">
+    <a href="/parks" class="btn btn-success">Go back</a>
+</div>

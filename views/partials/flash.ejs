@@ -1,0 +1,36 @@
+<% if(success && success.length) {%>
+    <div  id="flashMessage">
+        <div>
+            <div class="alert alert-success alert-dismissible fade-out" role="alert">   
+                <div><%= success %></div>   
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+
+                </button>
+            </div>
+        </div>
+    </div>
+
+<%}%>
+<% if(error && error.length) {%>
+    <div  id="flashMessage">
+        <div>
+            <div class="alert alert-danger alert-dismissible fade-out" role="alert">   
+                <div><%= error %></div>   
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+
+                </button>
+            </div>
+        </div>
+    </div>
+
+<%}%>
+
+<script>
+    const flashMessage = document.getElementById('flashMessage');
+    if (flashMessage) {
+        flashMessage.style.display = 'block';
+        setTimeout(() => {
+            flashMessage.style.display = 'none';
+        }, 4000);
+    }
+</script>
