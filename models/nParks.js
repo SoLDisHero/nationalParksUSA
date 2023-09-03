@@ -17,7 +17,11 @@ const ParkSchema = new mongoose.Schema({
             type:mongoose.Schema.Types.ObjectId,
             ref:"User"
         }
-    ]
+    ],
+    geometry:{
+        type: {type: String, enum: ["Point"], required: true},
+        coordinates: {type: [Number], required: true},
+    }
 })
 
 const Park = mongoose.model("Park", ParkSchema);

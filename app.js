@@ -1,3 +1,6 @@
+if(process.env.NODE_ENV !== "production"){
+    require("dotenv").config();
+}
 const express = require("express");
 const app = express();
 const path = require("path");
@@ -22,6 +25,13 @@ const sessionOptions = {
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const multer = require("multer");
+const {storage} = require("./cloudinary/index.js");
+const upload = multer({storage});
+const {cloudinary} = require("./cloudinary/index.js");
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding.js");
+const mapBoxToken = process.env.MAPBOX_TOKEN;
+const geocoder = mbxGeocoding({accessToken: mapBoxToken});
 
 const mongoose = require("mongoose");
 mongoose.connect("mongodb://127.0.0.1:27017/nationalParkUSA");
@@ -56,9 +66,10 @@ app.engine("ejs", ejsMate);
 
 //HOME ROUTE
 
-app.get("/", (req,res) => {
-    res.render("home.ejs")
-});
+app.get("/", catchAsync(async(req,res) => {
+    const parks = await Park.find();
+    res.render("home.ejs", {parks});
+}));
 
 //ALL PARKS
 
@@ -75,17 +86,18 @@ app.get("/parks/:id", catchAsync(async (req, res) => {
         path: "reviews",
         options: { sort: { _id: -1 } }, // Sort reviews by ID in descending order        
         populate:{path: "author"},
-    }).populate("author");
+    }).populate("author");    
     res.render("show.ejs", { park });
 }));
 
 //REVIEWS
 
-app.post("/parks/:id/reviews", isLoggedIn, catchAsync(async(req,res,next) => {
+app.post("/parks/:id/reviews", isLoggedIn, upload.array("imageUser"), catchAsync(async(req,res,next) => {
     const park = await Park.findById(req.params.id);
     const review = new Review(req.body.review);
     review.author = req.user._id;
     park.reviews.push(review);
+    review.photos = req.files.map((file) => ({url: file.path, filename: file.filename}))
     await review.save();
     await park.save();    
     req.flash("success", "You've posted a review!");
@@ -94,8 +106,12 @@ app.post("/parks/:id/reviews", isLoggedIn, catchAsync(async(req,res,next) => {
 
 app.delete("/parks/:id/reviews/:reviewID", isLoggedIn, isReviewAuthor, catchAsync(async(req,res,next) => {
     const {id, reviewID} = req.params;
+    const review = await Review.findById(reviewID);
     await Park.findByIdAndUpdate(id, {$pull: {reviews: reviewID}});
-    await Review.findByIdAndDelete(reviewID);
+    await Review.findByIdAndDelete(reviewID);       
+    for(let file of review.photos){
+        await cloudinary.uploader.destroy(file.filename); 
+    }
     req.flash("success", "You've deleted a review!");
     res.redirect(`/parks/${id}`)
 }));

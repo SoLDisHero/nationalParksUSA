@@ -30,7 +30,7 @@
         
         <% if(currentUser) {%>
             <h3 class="text-start my-3">Write a review</h3>
-                <form action="/parks/<%= park._id %>/reviews" method="post" class="needs-validation mb-5 text-start" novalidate>
+                <form action="/parks/<%= park._id %>/reviews" method="post" class="needs-validation mb-5 text-start" novalidate enctype="multipart/form-data">
                     <div class="mb-3">
                         <div class="mb-3">
                             <fieldset class="starability-basic">
@@ -54,6 +54,9 @@
                             Please enter a message in the textarea.
                             </div>
                         </div>
+                        <div class="mb-3">
+                            <input type="file" name="imageUser" class="form-control" multiple>
+                        </div>
                     </div>
                     <button class="btn btn-success">Submit</button>
                 </form>
@@ -63,15 +66,20 @@
                 <h5 class="parks-text">You have to be logged in to write reviews.</h5>
                 <%} %>
             <% for(let review of park.reviews) {%>
-            <p class="text-start fs-5">Rating: <%= review.rating %></p>
-            <p class="text-start fs-5">Author: <%= review.author.username %></p>
-            <p class="text-start"><%= review.body %></p>
+                <p class="text-start fs-5 starability-result star" data-rating="<%= review.rating %>">
+                Rated: 3 stars
+                </p>
+                <p class="text-start fs-5">Author: <%= review.author.username %></p>
+                <p class="text-start"><%= review.body %></p>
+                <% for(let image of review.photos) {%>
+                  <img src="<%= image.thumbnail %>" alt="image-review" class="img-thumbnail " name="<%= image.filename %>" style="width: 300px; height: 200px;object-fit: cover;">
+                 <% } %>
                 <% if(currentUser && review.author.equals(currentUser._id)) {%>
                 <form action="/parks/<%= park._id %>/reviews/<%= review._id %>?_method=DELETE" method="post">
-                    <button class="btn btn-danger btn-sm">DELETE</button>
+                    <button class="btn btn-danger btn-sm my-3">DELETE</button>
                 </form>
                 <% } %>
-            <p class="border-bottom my-3"></p>
+                <p class="border-bottom my-3"></p>
         <% } %>
     </div>
 </div>

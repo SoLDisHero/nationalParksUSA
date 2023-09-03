@@ -24,6 +24,7 @@ const seedDB = async () => {
                 directions: data[i].directionsInfo,
                 image: picNP,
                 imageAPI: imagesAllApi,
+                geometry: {type: "Point", coordinates: [data[i].longitude, data[i].latitude]},
                 });
             await park.save();
             }            

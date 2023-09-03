@@ -1,8 +1,19 @@
 <% layout("layouts/boilerplate.ejs") %>
+    <div class="container">
     <h1>National Parks of USA loading page</h1>
     <p>This platform is a gateway to discovering the diverse and awe-inspiring beauty of the
         National Parks of the USA. Join me as I navigate these remarkable landscapes, sharing my experiences and aspirations. 
         My goal is to share the beauty of our national parks and public lands in an effort to get people to see 
         the true value in land conservation.ejso</p>
+        <div class="my-5">            
+            <div id='map' style='width: auto; height: 700px;'></div>
+            <script>
+            const mapToken = '<%- process.env.MAPBOX_TOKEN %>';
+            const parksAll = <%- JSON.stringify(parks) %>;
+            console.log(parksAll)
+            </script>
+            <script src="/javascripts/showPageMap.js"></script>
+        </div>
+    </div>
 </body>
 </html>
