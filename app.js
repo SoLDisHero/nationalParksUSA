@@ -13,7 +13,7 @@ const catchAsync= require("./utils/catchAsync.js");
 const methodOverride = require("method-override");
 const session = require("express-session");
 const sessionOptions = {
-    secret: "thisisasecret",
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -34,7 +34,8 @@ const mapBoxToken = process.env.MAPBOX_TOKEN;
 const geocoder = mbxGeocoding({accessToken: mapBoxToken});
 
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://127.0.0.1:27017/nationalParkUSA");
+const dbURL = process.env.DB_URL || "mongodb://127.0.0.1:27017/nationalParkUSA";
+mongoose.connect(dbURL);
 mongoose.connection.on("error", console.error.bind(console, "error: "));
 mongoose.connection.once("open", () => {
     console.log("DB connected")
