@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const opts = {toJSON  : {virtuals: true}};
 const ParkSchema = new mongoose.Schema({
     title: { type: String, required: true},
     description: {type: String, required: true},
@@ -22,7 +23,11 @@ const ParkSchema = new mongoose.Schema({
         type: {type: String, enum: ["Point"], required: true},
         coordinates: {type: [Number], required: true},
     }
-})
+}, opts)
 
+ParkSchema.virtual("properties.popUpMarkup").get(function() {
+    return `<a href=/parks/${this._id}>${this.title}</a>
+    <p>${this.directions.substring(0,100)} ... </p>`
+})
 const Park = mongoose.model("Park", ParkSchema);
 module.exports = Park;

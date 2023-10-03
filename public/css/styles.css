@@ -8,6 +8,13 @@ h2{
 h3{
     font-family: 'Heebo', sans-serif
 }
+a{
+    outline: none;
+    text-decoration: none;
+    color:#000;
+    font-family: 'Barriecito', cursive;
+    font-size: 1rem;
+}
 .container-main{
     display: grid;
     grid-template-columns: repeat(3,200px);
@@ -31,6 +38,10 @@ h3{
     top: 175px; 
     right: 120px; 
     z-index: 100;
+}
+
+.parksAll {
+    max-width: 1000px;
 }
 @keyframes fadeOut{
     from{
@@ -74,6 +85,9 @@ h3{
 				  1px -1px 0 #000000,
 				  -1px -1px 0 #8a2d2d;
 }
+.loading{
+    padding-top: 2rem;
+}
 @media only screen and (max-width:768px){
     .container-main{
         grid-template-columns: repeat(1,200px);
@@ -87,6 +101,9 @@ h3{
     }
     .show-image img{
         height: 350px;
+    }
+    .parksAll {
+        width: 370px;
     }
 }
 
