@@ -27,7 +27,14 @@
     </div>
     
     <div class="col-lg-6 overflow-y-auto text-start" style="max-height: 700px;">
-        
+        <div class="my-5">            
+            <div id='map' style='width: auto; height: 300px;'></div>
+            <script>
+                const mapToken = '<%- process.env.MAPBOX_TOKEN %>';
+                const parksAll = <%- JSON.stringify(park) %>;
+                </script>
+            <script src="/javascripts/showPageMap.js"></script>
+        </div>
         <% if(currentUser) {%>
             <h3 class="text-start my-3">Write a review</h3>
                 <form action="/parks/<%= park._id %>/reviews" method="post" class="needs-validation mb-5 text-start" novalidate enctype="multipart/form-data">
